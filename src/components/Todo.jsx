@@ -14,15 +14,20 @@ const Todo = () => {
     e.preventDefault();
 
     if (task.trim()) {
-        const todoTasks = { id: Date.now(), task:task, isCompleted:false, isEditing:false }
-        setTodos([...todos,todoTasks ]); 
+        const newTodo  = { id: Date.now(), task:task, isCompleted:false, isEditing:false }
+        setTodos([...todos,newTodo ]); 
         setTask(""); 
       }
-  };  
+  }; 
+
+  const toggleComplete = (id) => {
+
+      setTodos(todos.map(item => item.id === id ? {...item,isCompleted:!item.isCompleted}:item))
+  }
 
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col justify-center items-center">
-      <div className="bg-white p-6 rounded-xl shadow-md w-96">
+      <div className="bg-white p-6 rounded-xl shadow-md w-1/2">
         <h1 className="text-xl font-semibold text-center text-gray-700 mb-4">Todo List</h1>
         <form className="flex gap-2 mb-4" onSubmit={handleAddTodo}>
           <input
@@ -39,7 +44,7 @@ const Todo = () => {
             Add
           </button>
         </form>
-        <TodoList todos={todos} />
+        <TodoList todos={todos} toggleComplete ={toggleComplete} />
       </div>
     </div>
   );
