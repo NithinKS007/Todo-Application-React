@@ -1,6 +1,13 @@
 import { PencilIcon, TrashIcon } from "@heroicons/react/16/solid";
+import { useState } from "react";
 
-const TodoList = ({ todos, toggleComplete }) => {
+const TodoList = ({ todos, toggleComplete,setTodos }) => {
+
+  const handleDelete = (id) =>{
+    const updatedTodos = todos.filter((item) => item.id !== id)
+    setTodos(updatedTodos)
+  }
+
   return (
     <div>
       {todos.length === 0 ? (
@@ -31,7 +38,7 @@ const TodoList = ({ todos, toggleComplete }) => {
               </button>
 
               <button>
-                <TrashIcon className="w-5 h-5" />
+                <TrashIcon onClick={()=>handleDelete(todoItem.id)} className="w-5 h-5" />
               </button>
             </div>
           </div>

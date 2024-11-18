@@ -10,9 +10,7 @@ const Todo = () => {
   };
 
   useEffect(() => {
-    const storedTodos = JSON.parse(localStorage.getItem("todos"));
-    console.log(storedTodos);
-    
+    const storedTodos = JSON.parse(localStorage.getItem("todos"));   
     if (storedTodos) {
       setTodos(storedTodos);
     }
@@ -21,6 +19,8 @@ const Todo = () => {
   useEffect(() => {
     if (todos.length > 0) {
       localStorage.setItem("todos", JSON.stringify(todos));
+    } else {
+      localStorage.removeItem("todos"); 
     }
   }, [todos]);
 
@@ -35,10 +35,12 @@ const Todo = () => {
       };
       setTodos([...todos, newTodo]);
       setTask("");
+      localStorage.setItem("todos", JSON.stringify(todos));
     }
   };
 
   const toggleComplete = (id) => {
+
     setTodos(
       todos.map((item) =>
         item.id === id ? { ...item, isCompleted: !item.isCompleted } : item
@@ -67,7 +69,7 @@ const Todo = () => {
             Add
           </button>
         </form>
-        <TodoList todos={todos} toggleComplete={toggleComplete} />
+        <TodoList todos={todos} toggleComplete={toggleComplete} setTodos={setTodos} />
       </div>
     </div>
   );
