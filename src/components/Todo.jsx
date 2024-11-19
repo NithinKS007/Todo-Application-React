@@ -5,10 +5,6 @@ const Todo = () => {
   const [todos, setTodos] = useState([]);
   const [task, setTask] = useState("");
 
-  const handleInputChange = (e) => {
-    setTask(e.target.value);
-  };
-
   useEffect(() => {
     const storedTodos = JSON.parse(localStorage.getItem("todos"));   
     if (storedTodos) {
@@ -24,6 +20,10 @@ const Todo = () => {
     }
   }, [todos]);
 
+  const handleInputChange = (e) => {
+    setTask(e.target.value);
+  };
+
   const handleAddTodo = (e) => {
     e.preventDefault();
 
@@ -32,6 +32,7 @@ const Todo = () => {
         id: Date.now(),
         task: task,
         isCompleted: false,
+        isEditing:false
       };
       setTodos([...todos, newTodo]);
       setTask("");
@@ -40,20 +41,28 @@ const Todo = () => {
   };
 
   const toggleComplete = (id) => {
-
     setTodos(
       todos.map((item) =>
         item.id === id ? { ...item, isCompleted: !item.isCompleted } : item
       )
     );
   };
+  const totalTasks = todos.length;
+  const completedTasks = todos.filter(todo => todo.isCompleted).length;
 
   return (
+
     <div className="bg-gray-100 min-h-screen flex flex-col justify-center items-center">
       <div className="bg-white p-6 rounded-xl shadow-md w-1/2">
         <h1 className="text-xl font-semibold text-center text-gray-700 mb-4">
           Todo List
         </h1>
+        <div className="text-center mb-4">
+          <p className="text-sm text-gray-600">
+            <span className="font-semibold">Completed:</span> {completedTasks} | {" "}
+            <span className="font-semibold">Total:</span> {totalTasks} 
+          </p>
+        </div>
         <form className="flex gap-2 mb-4" onSubmit={handleAddTodo}>
           <input
             type="text"
