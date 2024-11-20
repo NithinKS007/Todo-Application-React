@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { PencilIcon, TrashIcon } from "@heroicons/react/16/solid";
 
-const TodoList = ({ todos, toggleComplete, setTodos }) => {
+const TodoList = ({ todos, toggleComplete, setTodos, errorMessage, setErrorMessage  }) => {
   
   const [editingTodoId, setEditingTodoId] = useState(null)
   const [newTask, setNewTask] = useState("");
+ 
 
   const handleDelete = (id) => {
     const updatedTodos = todos.filter((item) => item.id !== id);
@@ -14,10 +15,17 @@ const TodoList = ({ todos, toggleComplete, setTodos }) => {
   const handleEdit = (id, currentTask) => {
     setEditingTodoId(id);
     setNewTask(currentTask);
+    setErrorMessage(""); 
   };
 
   const handleSaveEdit = (id) => {
+     setErrorMessage("");
     if (newTask.trim() === "") {
+      setErrorMessage("Task cannot be empty!");
+      return;
+    }
+    if (todos.some((todo) => todo.task === newTask && todo.id !== id)) {
+      setErrorMessage("This task already exists.");
       return;
     }
     const updatedTodos = todos.map((todo) => {
@@ -57,6 +65,7 @@ const TodoList = ({ todos, toggleComplete, setTodos }) => {
                 autoFocus
                 className="px-4 py-2 border border-gray-300 rounded-md w-full"
               />
+            
             ) : (
               <p
                 className={`text-gray-700 overflow-hidden ${
